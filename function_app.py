@@ -21,9 +21,7 @@ mongo_client = MongoClient(os.getenv('URI_MONGO'))
 
 @app.route(route="getNames")
 def get_names(req: func.HttpRequest) -> func.HttpResponse:
-    app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
-    mongo_client = MongoClient(os.getenv('URI_MONGO'))
-    
+        
     database = None
 
     logging.info('Python HTTP trigger function processed a request.')
