@@ -21,6 +21,9 @@ mongo_client = MongoClient(os.getenv('URI_MONGO'))
 
 @app.route(route="getNames")
 def get_names(req: func.HttpRequest) -> func.HttpResponse:
+    app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
+    mongo_client = MongoClient(os.getenv('URI_MONGO'))
+    
     database = None
 
     logging.info('Python HTTP trigger function processed a request.')
@@ -138,3 +141,13 @@ def get_names_to_phrase(req : func.HttpRequest)-> func.HttpResponse:
         except Exception as e:
             return func.HttpResponse(json({'message':'Some error ocurred!'}),status_code=500)
     return func.HttpResponse(json({'message':'Bad Request, phrase is missing!'}),status_code=400)
+
+
+@app.timer_trigger(schedule="mongo_pipeline_timer_trigger", arg_name="myTimer", run_on_startup=True,
+              use_monitor=False) 
+def mongo_pipeline_timer_trigger(myTimer: func.TimerRequest) -> None:
+    
+    if myTimer.past_due:
+        logging.info('The timer is past due!')
+
+    logging.info('Python timer trigger function executed.')
