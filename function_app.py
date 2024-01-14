@@ -43,7 +43,7 @@ def get_names(req: func.HttpRequest) -> func.HttpResponse:
     if name:
         resultados = database['names'].find_one({'name':name})
         resultados = json_util.dumps(resultados, default=str)
-        return func.HttpResponse(resultados,status_code=200)
+        return func.HttpResponse(resultados,status_code=200, mimetype='application/json')
     else:
         return func.HttpResponse(
              "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
